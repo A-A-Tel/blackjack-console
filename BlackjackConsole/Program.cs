@@ -2,4 +2,4 @@
 
 Table table = new(2, 1);
 
-table.RenderTable();
+table.Play();

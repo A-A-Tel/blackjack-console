@@ -2,8 +2,8 @@ namespace BlackjackConsole.Table;
 
 public enum GameState
 {
-    Deal,
     Bet,
+    Deal,
     Play,
     Payout
 }
