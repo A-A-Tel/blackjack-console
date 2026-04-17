@@ -1,4 +1,4 @@
-namespace BlackjackConsole.Player;
+namespace BlackjackConsole.TableSitters;
 
 public enum Action
 {

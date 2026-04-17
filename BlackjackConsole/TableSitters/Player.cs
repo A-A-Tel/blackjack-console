@@ -1,7 +1,6 @@
 using BlackjackConsole.Card;
-using BlackjackConsole.Player;
 using NameGenerator.Generators;
-using Action = BlackjackConsole.Player.Action;
+using Action = BlackjackConsole.TableSitters.Action;
 
 namespace BlackjackConsole.TableSitters;
 
@@ -38,5 +37,16 @@ public class Player : IDealable
     public override string ToString()
     {
         return $"{Name} - Inzet: {Bet} - Waarde: {Hand.GetValue()} ({Hand})";
+    }
+    
+    public string GetGestureText(Action action)
+    {
+        return action switch
+        {
+            Action.Hit => "tikt op de tafel",
+            Action.Stand => "zwaait met de hand",
+            Action.Double => "plaatst een extra fiche en tikt één keer",
+            _ => "doet iets onduidelijks"
+        };
     }
 }

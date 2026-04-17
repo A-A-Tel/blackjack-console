@@ -3,10 +3,6 @@ namespace BlackjackConsole.Card;
 public class Hand
 {
     private readonly List<Card> _cards = [
-    new(Suit.Clubs, Rank.Ace, false),
-    new(Suit.Clubs, Rank.Ace, false),
-    new(Suit.Clubs, Rank.Ace, false),
-    new(Suit.Clubs, Rank.Ace, false)
     ];
 
     public IReadOnlyList<Card> Cards => _cards;

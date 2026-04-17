@@ -1,11 +1,11 @@
-using BlackjackConsole.Player;
 using BlackjackConsole.TableSitters;
+using Action = BlackjackConsole.TableSitters.Action;
 
 namespace BlackjackConsole.Table;
 
 public class Table
 {
-    private readonly List<TableSitters.Player> _players = [];
+    private readonly List<Player> _players = [];
 
     public Table(int playerCount, int rounds)
     {
@@ -35,15 +35,12 @@ public class Table
     
     public void Advance()
     {
-        State = (GameState)(((int)State + 1) % 4);
+        State = (GameState)(((int)State + 1) % 3);
     }
 
     public void Play()
     {
-        for (int i = 0; i < Rounds; i++)
-        {
-            StartNextSequence();
-        }
+        while (true) StartNextSequence();
     }
 
     private void Reset()
@@ -59,6 +56,7 @@ public class Table
         switch (State)
         {
             case GameState.Deal: StartDealSequence(); break;
+            case GameState.Play: StartPlaySequence(); break;
             default: throw new ArgumentOutOfRangeException();
         }
     }
@@ -70,10 +68,7 @@ public class Table
         Console.WriteLine("\nTafel:");
         Console.WriteLine(string.Join(" - ", _players.Select(p => p.Name)));
         Console.WriteLine("\n\nDealer");
-
-        for (int round = 0; round < 2; round++)
-        {
-            Console.WriteLine($"\n--- Ronde {round + 1} ---");
+        
 
             foreach (var participant in participants)
             {
@@ -106,7 +101,64 @@ public class Table
                 }
             }
 
+            foreach (IDealable participant in participants)
+                _dealer.Deal(participant);
+
             RenderTable();
+
+        Advance();
+    }
+    
+    public void StartPlaySequence()
+    {
+        Console.WriteLine("\n=== SPEELRONDE ===");
+
+        foreach (var player in _players)
+        {
+            Console.WriteLine($"\nSpeler aan de beurt: {player.Name}");
+
+            bool done = false;
+
+            while (!done)
+            {
+                var expectedAction = player.GetAction();
+
+                Console.WriteLine($"Speler {player.Name} {player.GetGestureText(expectedAction)}");
+
+                while (true)
+                {
+                    Console.Write("Welke actie voer je uit? (hit/stand/double): ");
+                    string? input = Console.ReadLine()?.ToLower();
+
+                    if (string.IsNullOrWhiteSpace(input))
+                    {
+                        Console.WriteLine("Voer een geldige actie in.");
+                        continue;
+                    }
+
+                    if (!TryParseAction(input, out Action chosenAction))
+                    {
+                        Console.WriteLine("Onbekende actie. Gebruik: hit, stand, double");
+                        continue;
+                    }
+
+                    if (chosenAction == expectedAction)
+                    {
+                        Console.WriteLine($"✔ Juist — {player.Name} -> {expectedAction}");
+
+                        ExecuteAction(player, chosenAction);
+
+                        if (chosenAction is Action.Stand or Action.Double)
+                            done = true;
+
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"✘ Onjuist. Verwachtte: {expectedAction}");
+                    }
+                }
+            }
         }
 
         Advance();
@@ -115,5 +167,39 @@ public class Table
     public List<IDealable> GetDealSequence()
     {
         return [..Players, _dealer];
+    }
+
+    private static bool TryParseAction(string input, out Action action)
+    {
+        action = input switch
+        {
+            "hit" => Action.Hit,
+            "stand" => Action.Stand,
+            "double" => Action.Double,
+            _ => default
+        };
+
+        return input is "hit" or "stand" or "double";
+    }
+    
+    private void ExecuteAction(TableSitters.Player player, Action action)
+    {
+        switch (action)
+        {
+            case Action.Hit:
+                _dealer.Deal(player);
+                break;
+
+            case Action.Double:
+                _dealer.Deal(player);
+                // optionally double bet here
+                break;
+
+            case Action.Stand:
+                // do nothing
+                break;
+        }
+
+        Console.WriteLine(player);
     }
 }

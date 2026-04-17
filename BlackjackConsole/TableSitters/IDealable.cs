@@ -1,6 +1,4 @@
-using BlackjackConsole.Card;
-
-namespace BlackjackConsole.Player;
+namespace BlackjackConsole.TableSitters;
 
 public interface IDealable
 {

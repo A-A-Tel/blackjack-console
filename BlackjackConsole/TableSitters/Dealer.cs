@@ -1,5 +1,4 @@
 using BlackjackConsole.Card;
-using BlackjackConsole.Player;
 
 namespace BlackjackConsole.TableSitters;
 
