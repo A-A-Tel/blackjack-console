@@ -1,3 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using BlackjackConsole.Table;
 
-Console.WriteLine("Hello, World!");
+Table table = new(2, 1);
+
+table.RenderTable();

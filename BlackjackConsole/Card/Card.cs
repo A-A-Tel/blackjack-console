@@ -36,4 +36,9 @@ public class Card
     {
         Flipped = !Flipped;
     }
+
+    public override string ToString()
+    {
+        return $"{Rank} of {Suit}";
+    }
 }
