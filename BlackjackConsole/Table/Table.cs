@@ -1,6 +1,5 @@
-using BlackjackConsole.Card;
-using BlackjackConsole.Dealer;
 using BlackjackConsole.Player;
+using BlackjackConsole.TableSitters;
 
 namespace BlackjackConsole.Table;
 
@@ -11,7 +10,7 @@ public class Table
     public Table(int playerCount, int rounds)
     {
         Rounds = rounds;
-        Dealer = new Dealer.Dealer();
+        Dealer = new Dealer();
 
         for (int i = 0; i < playerCount; i++)
             _players.Add(new Player.Player());
@@ -19,25 +18,23 @@ public class Table
 
     public int Rounds { get; private set; }
 
+    public void RenderTable()
+    {
+        foreach (Player.Player player in _players)
+        {
+            Console.WriteLine(player.ToString());
+        }
+    }
+
     public IReadOnlyList<Player.Player> Players => _players;
 
-    public Dealer.Dealer Dealer { get; }
+    public Dealer Dealer { get; }
 
     public GameState State { get; private set; } = GameState.Deal;
 
     public void Advance()
     {
         State = (GameState)(((int)State + 1) % 4);
-    }
-
-    public void DealToPlayer(Player.Player player, Card.Card card)
-    {
-        player.AddCard(card);
-    }
-
-    public void DealToDealer(Card.Card card)
-    {
-        Dealer.AddCard(card);
     }
 
     public IEnumerable<IDealable> GetDealSequence()

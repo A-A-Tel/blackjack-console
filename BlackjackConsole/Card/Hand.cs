@@ -2,7 +2,12 @@ namespace BlackjackConsole.Card;
 
 public class Hand
 {
-    private readonly List<Card> _cards = [];
+    private readonly List<Card> _cards = [
+    new(Suit.Clubs, Rank.Ace, false),
+    new(Suit.Clubs, Rank.Ace, false),
+    new(Suit.Clubs, Rank.Ace, false),
+    new(Suit.Clubs, Rank.Ace, false)
+    ];
 
     public IReadOnlyList<Card> Cards => _cards;
 
@@ -29,5 +34,10 @@ public class Hand
         }
 
         return value;
+    }
+
+    public override string ToString()
+    {
+        return _cards.Aggregate(" ", (current, card) => $"{current}, {card}") + " ";
     }
 }

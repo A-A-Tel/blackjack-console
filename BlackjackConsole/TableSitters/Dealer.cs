@@ -1,7 +1,7 @@
 using BlackjackConsole.Card;
 using BlackjackConsole.Player;
 
-namespace BlackjackConsole.Dealer;
+namespace BlackjackConsole.TableSitters;
 
 public class Dealer : IDealable
 {

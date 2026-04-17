@@ -28,4 +28,9 @@ public class Player : IDealable
     {
         Hand.AddCard(card);
     }
+
+    public override string ToString()
+    {
+        return $"{Name} - {Hand.GetValue()} ({Hand.ToString()})";
+    }
 }
